@@ -10,6 +10,7 @@
 	<link href="demo/awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="icon" sizes="32x32" href="favicon.ico">
     <script></script>
+    <script src="/ttc/dist/js/countDown.js"></script>
 </head>
 <body class="rtl" style="">
 <div class="container">
@@ -23,22 +24,22 @@
             </div>
         </div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="/ttc/">الرئيسية</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item <?php ($_SERVER['REQUEST_URI'] == '/ttc/login.php' ? print 'active':'');?>">
                 <a class="nav-link" href="login.php">تسجيل الدخول <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item <?php ($_SERVER['REQUEST_URI'] == '/ttc/archive.php' ? print 'active':'');?>">
                 <a class="nav-link" href="archive.php">عرض اعمال المركز</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="register.php">انظم معنا</a>
+            <li class="nav-item  <?php ($_SERVER['REQUEST_URI'] == '/ttc/register.php' ? print 'active':'');?>">
+                <a class="nav-link" href="register.php">انضم معنا</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item  <?php ($_SERVER['REQUEST_URI'] == '/ttc/aboutus.php' ? print 'active':'');?>">
                 <a class="nav-link" href="aboutus.php">تواصل معنا</a>
             </li>
         </ul>
