@@ -52,8 +52,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             /* Password is correct, so start a new session and
                             save the username to the session */
                             session_start();
-                            $_SESSION['username'] = $username;      
-                            header("location: welcome.php");
+                            $_SESSION['username'] = $username; 
+                            echo '
+                            <div class="alert alert-success" role="alert">
+                                تم الدخول بنجاح الرجاء الانتظار <span countFrom="5" id="countDown">5</span>  ثواني
+                            </div>
+                            <script>
+                                countDown("countDown", "welcome.php");
+                            </script>
+                            ';
                         } else{
                             // Display an error message if password is not valid
                             $password_err = 'The password you entered was not valid.';
@@ -96,7 +103,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Login">
+                <input type="submit" class="btn btn-primary" value="دخول">
+                <input type="reset" class="btn btn-default" value="حذف">
             </div>
             
         </form>
