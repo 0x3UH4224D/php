@@ -1,20 +1,9 @@
 <?php
+require './includes/Pages/Home.php';
 
-include('header.php');
+use \CTG\Pages\Home;
 
-
-?>
-
-
-
-	
-		
-		
-		
-
-<?php
-
-include('footer.php');
-
+$home = new Home();
+echo $home->render();
 
 ?>
