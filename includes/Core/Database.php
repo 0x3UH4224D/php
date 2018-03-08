@@ -21,11 +21,31 @@ class Database {
         // TODO
     }
 
-    function add_user($username, $hash_password, $email, $permission) {
+    function addUser($username, $hash_password, $email, $permission) {
         // TODO
     }
 
-    function add_club($clubname, $manager_id) {
+    function addClub($id, $name, $goals, $members, $managerID) {
+        // TODO
+    }
+
+    function clubGetName($id) {
+        // TODO
+    }
+
+    function clubGetGoals($id) {
+        // TODO
+    }
+
+    function clubGetMembers($id) {
+        // TODO
+    }
+
+    function clubGetManager($id) {
+        // TODO
+    }
+
+    function clubGetIdByName($name) {
         // TODO
     }
 
