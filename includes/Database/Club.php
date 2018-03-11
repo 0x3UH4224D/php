@@ -1,5 +1,5 @@
 <?php
-namespace CTG\Core;
+namespace CTG\Database;
 
 use Database;
 

@@ -1,10 +1,10 @@
 <?php
 namespace CTG\Pages;
 
-require "./includes/Core/Page.php";
+require "./includes/Pages/Page.php";
 require "./includes/Widgets/Navbar.php";
 
-use \CTG\Core\Page;
+use \CTG\Pages\Page;
 use \CTG\Widgets\Navbar;
 
 class Home extends Page {
@@ -15,6 +15,14 @@ class Home extends Page {
     protected function header() {
         $header = Page::header();
         $navabr = new Navbar();
+
+        $links = [
+            "Home" => "/index.php",
+            "About Me" => "/about-me.php"
+        ];
+
+        $navabr->setLinks($links);
+
         return $header . "\n" . $navabr->render();
     }
 

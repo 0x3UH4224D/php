@@ -1,7 +1,5 @@
 <?php
-namespace CTG\Core;
-
-use Database;
+namespace CTG\Pages;
 
 abstract class Page {
     protected $title;
@@ -10,25 +8,23 @@ abstract class Page {
     function __construct($title, $lang = 'ar') {
         $this->title = $title;
         $this->lang = $lang;
-        // TODO
     }
     
     protected function header() {
-        return '<!doctype html>' . "\n"
-             . '<html lang="' . $this->lang . '">' . "\n"
-             . '<head>' . "\n"
-             . '<meta charset="UTF-8"/>' . "\n"
-             . '<title>' . $this->title . '</title>' . "\n"
-             . '</head>' . "\n"
-             . '<body>';
+        return "<!doctype html>\n"
+             . "<html lang='$this->lang'>\n"
+             . "<head>\n"
+             . "<meta charset='UTF-8'/>\n"
+             . "<title>$this->title</title>\n"
+             . "</head>\n"
+             . "<body>";
     }
     
     abstract protected function body();
     
     protected function footer() {
-        return '</body>' . "\n"
-             . '</html>';
-        
+        return "</body>\n"
+             . "</html>";
     }
     
     public function render() {
