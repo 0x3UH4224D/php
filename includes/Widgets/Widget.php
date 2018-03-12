@@ -2,74 +2,138 @@
 namespace CTG\Widgets;
 
 abstract class Widget {
-    // html ID, and Classes
-    private $classes = [];
-    private $id;
+    // html things
+    private $tag;
+    // this an array of HtmlAttribute objects
+    private $attributes = [];
 
     // widget unique name
-    protected $name;
+    private $name;
 
     // Error messages
-    private const classShouldBeString = "Class name should be string";
-    private const classesShouldBeStringArray = "Classes should be array of strings";
-    private const idShouldBeString = "ID should be string";
-    protected const nameShouldBeString = "Widget name should be string";
+    private const notHtmlAttribute = "Widget attribute should be HtmlAttribute";
+    private const attributeNotFound = "Attribute '%s' not found";
+    private const nameShouldBeString = "Widget name should be string";
+    private const tagShouldBeString = 'Tag should be string';
 
     // render function that will return HTML
     abstract function render();
 
-    function setClass($class) {
-        if (!is_string($class)) {
-            throw \Exception(self::classShouldBeString);
+    function setTag($tag) {
+        // Make sure $tag is string
+        if (!is_string($tag)) {
+            throw new \Exception(self::tagShouldBeString);
         }
 
-        $this->classes = [$class];
+        $this->tag = $tag;
     }
 
-    function setClasses(&$classes) {
-        if (!is_array($classes)) {
-            throw \Exception(self::classesShouldBeStringArray);
+    function getTag() {
+        return $this->tag;
+    }
+
+    protected function addAttribute($attribute) {
+        if (!HtmlAttribute::isHtmlAttribute($attribute)) {
+            throw new \Exception(self::notHtmlAttribute);
         }
 
-        foreach ($classes as $class) {
-            if (!is_string($class)) {
-                throw \Exception(self::classesShouldBeStringArray);
+        $this->attributes[] = $attribute;
+    }
+
+    function getAttributes() {
+        return $this->attributes;
+    }
+
+    function updateAttribute($name, $new_value) {
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getName() == $name) {
+                $attribute->setValue($new_value);
+                return;
             }
         }
 
-        $this->classes = $classes;
-    }
-
-    function addClass($class) {
-        if (!is_string($class)) {
-            throw \Exception(self::classShouldBeString);
-        }
-
-        $this->classes[] = $class;
-    }
-
-
-    function &getClasses() {
-        return $this->classes;
-    }
-
-    function setID($id) {
-        if (!is_string($id)) {
-            throw \Exception(self::idShouldBeString);
-        }
-
-        $this->id = $id;
-    }
-
-    function getID() {
-        return $this->id;
+        throw new \Exception(sprintf(self::attributeNotFound, $name));
     }
 
     function getName() {
         return $this->name;
     }
 
+    protected function setName($name) {
+        if (!is_string($name)) {
+            throw new \Exception(self::nameShouldBeString);
+        }
+
+        $this->name = $name;
+    }
+
+    protected function renderHelper($body) {
+        $attributes = $this->getAttributes();
+
+        $html_attributes = '';
+        foreach ($attributes as $attribute) {
+            $html_attributes .= ' ' . $attribute->render();
+        }
+
+        // build the html block
+        $result = '<' . $this->getTag() . $html_attributes . '>';
+        $result .= $body;
+        $result .= '</' . $this->getTag() . ">";
+
+        return $result;
+    }
+
     static function isWidget($widget) {
-        return is_a($widget, 'Widget');
+        return is_a($widget, 'CTG\Widgets\Widget');
+    }
+}
+
+// HtmlAttribute represent html attribute
+class HtmlAttribute {
+    private $name;
+    // values are sprated by space
+    private $value;
+
+    // Error messages
+    private const nameShouldBeString = 'Attribute name should be string';
+    private const valueShouldBeString = 'Attribute value should be string';
+
+    function __construct($name, $value) {
+        $this->setName($name);
+        $this->setValue($value);
+    }
+
+    function setName($name) {
+        // TODO: check if name is valid html attribute
+        if (!is_string($name)) {
+            throw new \Exception(self::nameShouldBeString);
+        }
+
+        $this->name = $name;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function setValue($value) {
+        // TODO: check if value is valid html value
+        if (!is_string($value)) {
+            throw new \Exception(self::valueShouldBeString);
+        }
+
+        $this->value = $value;
+    }
+
+    function getValue() {
+        return $this->value;
+    }
+
+    function isHtmlAttribute($attribute) {
+        return is_a($attribute, 'CTG\Widgets\HtmlAttribute');
+    }
+
+    function render() {
+        return $this->name . '="' . $this->value . '"';
     }
 }

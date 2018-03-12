@@ -1,32 +1,50 @@
 <?php
 namespace CTG\Widgets;
 
-require "./includes/Widgets/Widget.php";
+require_once "./includes/Widgets/Widget.php";
+require_once "./includes/Widgets/Link.php";
 
 use \CTG\Widgets\Widget;
+use \CTG\Widgets\Link;
 
 class Navbar extends Widget {
-    private $links;
+    private $links = [];
+
+    // Error messages
+    private const notLink = 'Navbar can only contain Link objects';
+
+    function __construct($name, $links) {
+        $this->setName($name);
+        $this->setTag("navbar");
+
+        $this->setLinks($links);
+    }
 
     function addLink($link) {
-        // TODO: check the type of $link
+        if (!Link::isLink($link)) {
+            throw new \Exception(self::notLink);
+        }
 
         $this->links[] = $link;
     }
 
     function setLinks($links) {
-        $this->links = $links;
+        // make sure passed array contains links objects
+        foreach ($links as $link) {
+            if (!Link::isLink($link)) {
+                throw new \Exception(self::notLink);
+            }
+            
+            $this->links = $links;
+        }
     }
 
     function render() {
-        // TODO: use classes and ID from widget
-
-        $result = '<div>' . "\n";
-        foreach ($this->links as $key => $value) {
-            $result .= "<a href=\"$value\">$key</a>" . "\n";
+        $body = "\n";
+        foreach ($this->links as $link) {
+            $body .= $link->render() . "\n";
         }
-        $result .= '</div>' . "\n";
 
-        return $result;
+        return $this->renderHelper($body);
     }
 }

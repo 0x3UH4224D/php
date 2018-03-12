@@ -1,43 +1,35 @@
 <?php
 namespace CTG\Widgets;
 
+require_once "./includes/Widgets/Widget.php";
+
+use \CTG\Widgets\Widget;
+
 class Container extends Widget {
     // children inside this container
     private $children = [];
-    // tag value could be: div, sectio, span, footer, header
-    private $tag = 'div';
 
     // Error messages
     private const notSubclassOfWidget = 'Container can only contain subclasses of Widget';
     private const widgetNameExists = 'There is already widget with name: ';
     private const tagShouldBeString = 'Tag should be string';
 
-    function __construct($name, $tag) {
-        // Make sure that $name is string
-        if (!is_string($name)) {
-            throw \Exception($this->nameShouldBeString);
-        }
-
-        // Make sure $tag is string
-        if (!is_string($tag)) {
-            throw \Exception($this->nameShouldBeString);
-        }
-
+    function __construct($name, $tag = 'div') {
         // Assign the passed values
-        $this->name = $name;
-        $this->tag = $tag;
+        $this->setName($name);
+        $this->setTag($tag);
     }
 
     function add(&$widget) {
         // Make sure this widget is subclass of 'Widget' class
-        if (!Widget::is_widget($widget)) {
-            throw \Exception($this->notSubclassOfWidget);
+        if (!Widget::isWidget($widget)) {
+            throw new \Exception(self::notSubclassOfWidget);
         }
 
         // Make sure this widget doesn't have name that other widgets use
         foreach ($this->children as $child) {
             if ($child->getName() == $widget->getName()) {
-                throw \Exception($this->widgetNameExists . $widget->getName());
+                throw new \Exception(self::widgetNameExists . $widget->getName());
             }
         }
 
@@ -63,17 +55,16 @@ class Container extends Widget {
         return false;
     }
 
-    function get_children() {
-        return &$this->children;
+    function &getChildren() {
+        return $this->children;
     }
 
     function render() {
-        // TODO: not done yet, use classes and ID from Widget, and use tag insted
-        //       of static 'div'
-        $result = '<div>' . "\n";
+        $body = '' . "\n";
         foreach ($this->children as $child) {
-            $result .= $child->render() . "\n";
+            $body .= $child->render() . "\n";
         }
-        $result .= '</div>' . "\n";
+
+        return $this->renderHelper($body);
     }
 }
