@@ -34,7 +34,7 @@ class Link extends Widget {
     }
 
     function getTitle() {
-        $this->title;
+        return $this->title;
     }
 
     function setUrl($url) {
@@ -56,6 +56,6 @@ class Link extends Widget {
     }
 
     function render() {
-        return $this->renderHelper($this->title);
+        return $this->renderHelper($this->getTitle());
     }
 }

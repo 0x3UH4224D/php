@@ -6,12 +6,14 @@ require_once "./includes/Widgets/Navbar.php";
 require_once "./includes/Widgets/Container.php";
 require_once "./includes/Widgets/Link.php";
 require_once "./includes/Widgets/ListBox.php";
+require_once "./includes/Widgets/Label.php";
 
 use \CTG\Pages\Page;
 use \CTG\Widgets\Navbar;
 use \CTG\Widgets\Container;
 use \CTG\Widgets\Link;
 use \CTG\Widgets\ListBox;
+use \CTG\Widgets\Label;
 
 class Home extends Page {
     function __construct() {
@@ -36,6 +38,10 @@ class Home extends Page {
     }
 
     protected function body() {
-        return '<div>محتوى صفحة البوابة</div>';
+        $qute = new Label('mytext', 'اقتباس جميل');
+        $qute->toBlockquote();
+
+        return '<div>محتوى صفحة البوابة</div>'
+        . $qute->render();
     }
 }
