@@ -32,11 +32,8 @@ abstract class Widget {
         return $this->tag;
     }
 
-    protected function addAttribute($attribute) {
-        if (!HtmlAttribute::isHtmlAttribute($attribute)) {
-            throw new \Exception(self::notHtmlAttribute);
-        }
-
+    function addAttribute($name, $value) {
+        $attribute = new HtmlAttribute($name, $value);
         $this->attributes[] = $attribute;
     }
 

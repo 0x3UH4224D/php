@@ -23,25 +23,25 @@ class Home extends Page {
     protected function header() {
         $header = Page::header();
 
-        $links = [
-            new Link('home-link', 'Home', '/index.php'),
-            new Link('about-me-link', 'About Me', '/about-me.php')
-        ];
+        $navabr = new Navbar('top_nav');
+        $navabr->addLink('home-link', 'Home', '/index.php');
+        $navabr->addLink('about-me-link', 'About Me', '/about-me.php');
 
-        $navabr = new Navbar('topNav', $links);
-
-        $list = new ListBox('my_list');
-        $list->add($links[0]);
-        $list->add($links[1]);
-
-        return $header . "\n" . $navabr->render() . "\n" . $list->render();
+        return $header . "\n" . $navabr->render();
     }
 
     protected function body() {
         $qute = new Label('mytext', 'اقتباس جميل');
-        $qute->toBlockquote();
+        $qute->addAttribute('class', 'h1');
+        $qute->toPlainText();
 
-        return '<div>محتوى صفحة البوابة</div>'
-        . $qute->render();
+        $container = new Container('top_container', $qute);
+        $container->addAttribute('class', 'alert alert-success');
+
+        $main_container = new Container('main', $container);
+        $main_container->addAttribute('class', 'container');
+
+        return '<div>محتوى صفحة البوابة</div>' . "\n"
+             . $main_container->render();
     }
 }

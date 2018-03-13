@@ -8,6 +8,7 @@ use \CTG\Widgets\HtmlAttribute;
 
 class Label extends Widget {
     private $text;
+    private $plainText = false;
 
     // Error messages
     private const textShouldBeString = 'Text should be string';
@@ -33,17 +34,27 @@ class Label extends Widget {
 
     function toParagraph() {
         $this->setTag('p');
+        $this->plainText = false;
     }
 
     function toBlockquote() {
         $this->setTag('blockquote');
+        $this->plainText = false;
     }
 
-    static function isText($text) {
+    function toPlainText() {
+        $this->plainText = true;
+    }
+
+    static function isLabel($text) {
         return is_a($text, 'CTG\Widgets\Text');
     }
 
     function render() {
-        return $this->renderHelper($this->getText());
+        if ($this->plainText) {
+            return $this->text;
+        } else {
+            return $this->renderHelper($this->getText());
+        }
     }
 }

@@ -18,8 +18,7 @@ class Link extends Widget {
         $this->setName($name);
         $this->setTag('a');
 
-        $href = new HtmlAttribute('href', $url);
-        $this->addAttribute($href);
+        $this->addAttribute('href', $url);
 
         $this->setTitle($title);
         $this->setUrl($url);
