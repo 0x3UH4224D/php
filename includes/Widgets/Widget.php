@@ -9,12 +9,15 @@ abstract class Widget {
 
     // widget unique name
     private $name;
+    // whether this widget should close the HTML tage or not
+    private $closeTag = true;
 
     // Error messages
     private const notHtmlAttribute = "Widget attribute should be HtmlAttribute";
     private const attributeNotFound = "Attribute '%s' not found";
     private const nameShouldBeString = "Widget name should be string";
     private const tagShouldBeString = 'Tag should be string';
+    private const closeTagShouldBeBoolean = "CloseTag should be 'true' or 'false'";
 
     // render function that will return HTML
     abstract function render();
@@ -64,6 +67,18 @@ abstract class Widget {
         $this->name = $name;
     }
 
+    protected function getCloseTag() {
+        return $this->closeTag;
+    }
+
+    protected function setCloseTag($value) {
+        if (!is_bool($value)) {
+            throw new \Exception(self::closeTagShouldBeBoolean);
+        }
+
+        $this->closeTag = $value;
+    }
+
     protected function renderHelper($body) {
         $attributes = $this->getAttributes();
 
@@ -75,7 +90,9 @@ abstract class Widget {
         // build the html block
         $result = '<' . $this->getTag() . $html_attributes . '>';
         $result .= $body;
-        $result .= '</' . $this->getTag() . ">";
+        if ($this->getCloseTag()) {
+            $result .= '</' . $this->getTag() . ">";
+        }
 
         return $result;
     }

@@ -42,6 +42,11 @@ class Label extends Widget {
         $this->plainText = false;
     }
 
+    function toSample() {
+        $this->setTag('samp');
+        $this->plainText = false;
+    }
+
     function toPlainText() {
         $this->plainText = true;
     }
