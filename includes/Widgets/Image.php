@@ -33,7 +33,6 @@ class Image extends Widget {
             throw new \Exception(self::srcShouldBeString);
         }
 
-        $this->source = $source;
         $this->addAttribute('src', $source);
     }
 
@@ -66,11 +65,7 @@ class Image extends Widget {
     }
 
     function getHeight() {
-        try {
-            $height = $this->getAttributeValue('height');
-        } catch (\Exception $exception) {
-            return '';
-        }
+        return $this->getAttributeValue('height');
     }
 
     function setWidth($width) {
@@ -78,16 +73,15 @@ class Image extends Widget {
             throw new \Exception(self::heightShouldBeString);
         }
 
-
         $this->addAttribute('width', $width);
     }
 
     function getWidth() {
-        try {
-            $height = $this->getAttributeValue('width');
-        } catch (\Exception $exception) {
-            return '';
-        }
+        return $this->getAttributeValue('width');
+    }
+
+    static function isImage($image) {
+        return is_a($image, 'CTG\Widgets\Image');
     }
 
     function render() {

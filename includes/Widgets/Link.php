@@ -8,7 +8,6 @@ use \CTG\Widgets\HtmlAttribute;
 
 class Link extends Widget {
     private $title;
-    private $url;
 
     // Error messages
     private const titleShouldBeString = 'Link title should be string';
@@ -41,13 +40,11 @@ class Link extends Widget {
             throw new \Exception(self::urlShouldBeString);
         }
 
-        $this->url = $url;
         $this->addAttribute('href', $url);
     }
 
-
     function getUrl() {
-        $this->url;
+        return $this->getAttributeValue('href');
     }
 
     static function isLink($link) {

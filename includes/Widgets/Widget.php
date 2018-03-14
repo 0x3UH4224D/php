@@ -48,7 +48,7 @@ abstract class Widget {
             }
         }
 
-        throw new \Exception(sprintf(self::attributeNotFound, $name));
+        return '';
     }
 
     protected function addAttribute($name, $value) {
