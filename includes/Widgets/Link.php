@@ -42,7 +42,7 @@ class Link extends Widget {
         }
 
         $this->url = $url;
-        $this->updateAttribute('href', $url);
+        $this->addAttribute('href', $url);
     }
 
 

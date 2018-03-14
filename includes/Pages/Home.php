@@ -7,6 +7,7 @@ require_once "./includes/Widgets/Container.php";
 require_once "./includes/Widgets/Link.php";
 require_once "./includes/Widgets/ListBox.php";
 require_once "./includes/Widgets/Label.php";
+require_once "./includes/Widgets/Image.php";
 
 use \CTG\Pages\Page;
 use \CTG\Widgets\Navbar;
@@ -14,6 +15,7 @@ use \CTG\Widgets\Container;
 use \CTG\Widgets\Link;
 use \CTG\Widgets\ListBox;
 use \CTG\Widgets\Label;
+use \CTG\Widgets\Image;
 
 class Home extends Page {
     function __construct() {
@@ -32,14 +34,17 @@ class Home extends Page {
 
     protected function body() {
         $qute = new Label('mytext', 'اقتباس جميل');
-        $qute->addAttribute('class', 'h1');
-        $qute->toPlainText();
+        $qute->setClass('h1');
+        $qute->toTitle(3);
 
         $container = new Container('top_container', $qute);
-        $container->addAttribute('class', 'alert alert-success');
+        $container->setClass('alert alert-success');
 
         $main_container = new Container('main', $container);
-        $main_container->addAttribute('class', 'container');
+        $container->setClass('container');
+
+        $image = new Image('logo', '1', 'https://php.net/images/logos/php-logo.svg', '50%', '50%');
+        $main_container->add($image);
 
         return '<div>محتوى صفحة البوابة</div>' . "\n"
              . $main_container->render();

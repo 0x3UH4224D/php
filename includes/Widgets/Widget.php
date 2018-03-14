@@ -18,11 +18,13 @@ abstract class Widget {
     private const nameShouldBeString = "Widget name should be string";
     private const tagShouldBeString = 'Tag should be string';
     private const closeTagShouldBeBoolean = "CloseTag should be 'true' or 'false'";
+    private const idShouldBeString = "ID should be String";
+    private const classShouldBeString = "Class should be String";
 
     // render function that will return HTML
     abstract function render();
 
-    function setTag($tag) {
+    protected function setTag($tag) {
         // Make sure $tag is string
         if (!is_string($tag)) {
             throw new \Exception(self::tagShouldBeString);
@@ -35,24 +37,57 @@ abstract class Widget {
         return $this->tag;
     }
 
-    function addAttribute($name, $value) {
-        $attribute = new HtmlAttribute($name, $value);
-        $this->attributes[] = $attribute;
-    }
-
     function getAttributes() {
         return $this->attributes;
     }
 
-    function updateAttribute($name, $new_value) {
+    function getAttributeValue($name) {
         foreach ($this->getAttributes() as $attribute) {
             if ($attribute->getName() == $name) {
-                $attribute->setValue($new_value);
-                return;
+                return $attribute->getValue();
             }
         }
 
         throw new \Exception(sprintf(self::attributeNotFound, $name));
+    }
+
+    protected function addAttribute($name, $value) {
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getName() == $name) {
+                $attribute->setValue($value);
+                return;
+            }
+        }
+
+        $attribute = new HtmlAttribute($name, $value);
+        $this->attributes[] = $attribute;
+    }
+
+    /* protected function updateAttribute($name, $new_value) {
+     *     foreach ($this->getAttributes() as $attribute) {
+     *         if ($attribute->getName() == $name) {
+     *             $attribute->setValue($new_value);
+     *             return;
+     *         }
+     *     }
+
+     *     throw new \Exception(sprintf(self::attributeNotFound, $name));
+     * }*/
+
+    function setID($id) {
+        if (!is_string($id)) {
+            throw new \Exception(self::idShouldBeString);
+        }
+
+        $this->addAttribute('id', $id);
+    }
+
+    function setClass($class) {
+        if (!is_string($class)) {
+            throw new \Exception(self::classShouldBeString);
+        }
+
+        $this->addAttribute('class', $class);
     }
 
     function getName() {
@@ -79,7 +114,7 @@ abstract class Widget {
         $this->closeTag = $value;
     }
 
-    protected function renderHelper($body) {
+    protected function renderHelper($body = null) {
         $attributes = $this->getAttributes();
 
         $html_attributes = '';
@@ -89,7 +124,9 @@ abstract class Widget {
 
         // build the html block
         $result = '<' . $this->getTag() . $html_attributes . '>';
-        $result .= $body;
+        if (!is_null($body)) {
+            $result .= $body;
+        }
         if ($this->getCloseTag()) {
             $result .= '</' . $this->getTag() . ">";
         }
