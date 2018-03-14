@@ -27,17 +27,21 @@ abstract class Page {
              . "</html>";
     }
     
-    public function render() {
+    function render() {
         return $this->header() . "\n"
              . $this->body() . "\n"
              . $this->footer();
     }
 
-    public function get_title() {
+    function getTitle() {
         return $this->title;
     }
 
-    public function get_lang() {
+    function getLang() {
         return $this->lang;
+    }
+
+    function getLink() {
+        return $_SERVER['PHP_SELF'];
     }
 }

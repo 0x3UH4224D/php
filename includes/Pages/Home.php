@@ -8,6 +8,7 @@ require_once "./includes/Widgets/Link.php";
 require_once "./includes/Widgets/ListBox.php";
 require_once "./includes/Widgets/Label.php";
 require_once "./includes/Widgets/Image.php";
+require_once "./includes/Widgets/Form.php";
 
 use \CTG\Pages\Page;
 use \CTG\Widgets\Navbar;
@@ -16,6 +17,7 @@ use \CTG\Widgets\Link;
 use \CTG\Widgets\ListBox;
 use \CTG\Widgets\Label;
 use \CTG\Widgets\Image;
+use \CTG\Widgets\Form;
 
 class Home extends Page {
     function __construct() {
@@ -43,8 +45,12 @@ class Home extends Page {
         $main_container = new Container('main', $container);
         $container->setClass('container');
 
-        $image = new Image('logo', '1', 'https://php.net/images/logos/php-logo.svg', '50%', '50%');
-        $main_container->add($image);
+        $image = new Image('logo', '1', 'https://php.net/images/logos/php-logo.svg', '20%', '20%');
+
+        $form = new Form('my_form', 'this.php');
+        $form->add($image);
+
+        $main_container->add($form);
 
         return '<div>محتوى صفحة البوابة</div>' . "\n"
              . $main_container->render();

@@ -14,12 +14,14 @@ class Container extends Widget {
     private const widgetNameExists = 'There is already widget with name: ';
     private const tagShouldBeString = 'Tag should be string';
 
-    function __construct($name, $child, $tag = 'div') {
+    function __construct($name, $child = null, $tag = 'div') {
         // Assign the passed values
         $this->setName($name);
         $this->setTag($tag);
 
-        $this->add($child);
+        if (!is_null($child)) {
+            $this->add($child);
+        }
     }
 
     function add(&$widget) {
