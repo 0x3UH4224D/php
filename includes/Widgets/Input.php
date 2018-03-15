@@ -20,9 +20,13 @@ class Input extends Widget {
         return $input;
     }
 
-    static function Checkbox($name, $value) {
+    static function Checkbox($name, $value, $is_checked = null) {
         $input = new self('checkbox', $name);
         $input->setValue($value);
+
+        if (!is_null($is_checked)) {
+            $input->setChecked();
+        }
 
         return $input;
     }
@@ -96,8 +100,12 @@ class Input extends Widget {
         return $input;
     }
 
-    static function Password($name, $required = true) {
+    static function Password($name, $placeholder = null, $required = true) {
         $input = new self('password', $name);
+
+        if (!is_null($placeholder)) {
+            $input->setPlaceHolder($placeholder);
+        }
 
         if (!is_null($required)) {
             $input->setRequired();
@@ -157,11 +165,15 @@ class Input extends Widget {
         return $input;
     }
 
-    static function Text($name, $placeholder = null) {
+    static function Text($name, $placeholder = null, $required = null) {
         $input = new self('text', $name);
 
         if (!is_null($placeholder)) {
             $input->setPlaceHolder($placeholder);
+        }
+
+        if (!is_null($required)) {
+            $input->setRequired();
         }
 
         return $input;

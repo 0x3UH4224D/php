@@ -23,6 +23,11 @@ class Label extends Widget {
         $this->setPlainText(true);
     }
 
+    function setTag($tag) {
+        parent::setTag($tag);
+        $this->setPlainText(false);
+    }
+
     function setText($text) {
         if (!is_string($text)) {
             throw new \Exception(self::textShouldBeString);
@@ -49,62 +54,82 @@ class Label extends Widget {
 
     function toParagraph() {
         $this->setTag('p');
-        $this->setPlainText(false);
     }
 
     function toBlockquote() {
         $this->setTag('blockquote');
-        $this->setPlainText(false);
     }
 
     function toSample() {
         $this->setTag('samp');
-        $this->setPlainText(false);
     }
 
     function toCode() {
         $this->setTag('code');
-        $this->setPlainText(false);
     }
 
     function toCite() {
         $this->setTag('cite');
-        $this->setPlainText(false);
     }
 
     function toKeyboardInput() {
         $this->setTag('kbd');
-        $this->setPlainText(false);
     }
 
     function toEmphasized() {
         $this->setTag('em');
-        $this->setPlainText(false);
     }
 
     function toStrong() {
         $this->setTag('strong');
-        $this->setPlainText(false);
     }
 
     function toSmall() {
         $this->setTag('small');
-        $this->setPlainText(false);
     }
 
     function toVariable() {
         $this->setTag('var');
-        $this->setPlainText(false);
     }
 
     function toDeleted() {
         $this->setTag('del');
-        $this->setPlainText(false);
     }
 
     function toInserted() {
         $this->setTag('ins');
-        $this->setPlainText(false);
+    }
+
+    function toMark() {
+        $this->setTag('mark');
+    }
+
+    function toBold() {
+        $this->setTag('b');
+    }
+
+    function toItalic() {
+        $this->setTag('i');
+    }
+
+    function toPreformattedText() {
+        $this->setTag('pre');
+    }
+
+    function toSubscriptText() {
+        $this->setTag('sub');
+    }
+
+    function toSuperscriptText() {
+        $this->setTag('sup');
+    }
+
+    function toShortQuotation() {
+        $this->setTag('q');
+    }
+
+    function toSummary() {
+        $this->setTag('summary');
     }
 
     function toIncorrect() {

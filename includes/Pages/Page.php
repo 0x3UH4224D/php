@@ -9,6 +9,8 @@ abstract class Page {
         $this->title = $title;
         $this->lang = $lang;
     }
+
+    abstract function handler();
     
     protected function header() {
         return "<!doctype html>\n"
@@ -39,9 +41,5 @@ abstract class Page {
 
     function getLang() {
         return $this->lang;
-    }
-
-    function getLink() {
-        return $_SERVER['PHP_SELF'];
     }
 }

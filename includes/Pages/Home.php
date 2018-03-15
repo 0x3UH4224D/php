@@ -37,27 +37,23 @@ class Home extends Page {
     }
 
     protected function body() {
-        $qute = new Label('mytext', 'اقتباس جميل');
-        $qute->setClass('h1');
-        $qute->toTitle(3);
+        $username = Input::Text('username', 'Enter your name', true);
+        $password = Input::Password('password', 'Enter your password', true);
+        $remember_me = Input::Checkbox('remember', 'remember_me', true);
+        $submit = Input::Submit('login_btn', 'Login');
 
-        $container = new Container('top_container', $qute);
-        $container->setClass('alert alert-success');
+        $login_form = new Form('login', 'post');
+        $login_form->add($username);
+        $login_form->add($password);
+        $login_form->add($remember_me);
+        $login_form->add($submit);
 
-        $main_container = new Container('main', $container);
-        $container->setClass('container');
+        return $login_form->render();
+    }
 
-        $image = new Image('logo', '1', 'https://php.net/images/logos/php-logo.svg', '20%', '20%');
-
-        $form = new Form('my_form', 'this.php');
-        $form->add($image);
-
-        $main_container->add($form);
-
-        $input = Input::Reset('my', 'hi');
-        $main_container->add($input);
-
-        return '<div>محتوى صفحة البوابة</div>' . "\n"
-             . $main_container->render();
+    function handler() {
+        if (isset($_POST['username'])) {
+            echo $_POST['username'];
+        }
     }
 }
