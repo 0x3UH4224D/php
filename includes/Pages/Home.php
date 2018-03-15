@@ -9,6 +9,7 @@ require_once "./includes/Widgets/ListBox.php";
 require_once "./includes/Widgets/Label.php";
 require_once "./includes/Widgets/Image.php";
 require_once "./includes/Widgets/Form.php";
+require_once "./includes/Widgets/Input.php";
 
 use \CTG\Pages\Page;
 use \CTG\Widgets\Navbar;
@@ -18,6 +19,7 @@ use \CTG\Widgets\ListBox;
 use \CTG\Widgets\Label;
 use \CTG\Widgets\Image;
 use \CTG\Widgets\Form;
+use \CTG\Widgets\Input;
 
 class Home extends Page {
     function __construct() {
@@ -51,6 +53,9 @@ class Home extends Page {
         $form->add($image);
 
         $main_container->add($form);
+
+        $input = Input::Reset('my', 'hi');
+        $main_container->add($input);
 
         return '<div>محتوى صفحة البوابة</div>' . "\n"
              . $main_container->render();

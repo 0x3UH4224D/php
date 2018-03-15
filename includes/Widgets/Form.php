@@ -73,7 +73,7 @@ class Form extends Container {
     }
 
     function getAutoComplete() {
-        $value = $thos->getAttributeValue('autocomplete');
+        $value = $this->getAttributeValue('autocomplete');
         if ($value == 'on') {
             return true;
         } else {

@@ -1,6 +1,7 @@
 <?php
 namespace CTG\Widgets;
 
+// TODO: add seter and geter for global HTML attribute
 abstract class Widget {
     // html things
     private $tag;
@@ -51,11 +52,13 @@ abstract class Widget {
         return '';
     }
 
-    protected function addAttribute($name, $value) {
-        foreach ($this->getAttributes() as $attribute) {
-            if ($attribute->getName() == $name) {
-                $attribute->setValue($value);
-                return;
+    protected function addAttribute($name, $value = null) {
+        if (!is_null($value)) {
+            foreach ($this->getAttributes() as $attribute) {
+                if ($attribute->getName() == $name) {
+                    $attribute->setValue($value);
+                    return;
+                }
             }
         }
 
@@ -147,9 +150,9 @@ class HtmlAttribute {
 
     // Error messages
     private const nameShouldBeString = 'Attribute name should be string';
-    private const valueShouldBeString = 'Attribute value should be string';
+    private const valueShouldBeString = "Attribute value should be string or 'null'";
 
-    function __construct($name, $value) {
+    function __construct($name, $value = null) {
         $this->setName($name);
         $this->setValue($value);
     }
@@ -167,9 +170,9 @@ class HtmlAttribute {
         return $this->name;
     }
 
-    function setValue($value) {
+    function setValue($value = null) {
         // TODO: check if value is valid html value
-        if (!is_string($value)) {
+        if (!is_string($value) && !is_null($value)) {
             throw new \Exception(self::valueShouldBeString);
         }
 
@@ -177,7 +180,11 @@ class HtmlAttribute {
     }
 
     function getValue() {
-        return $this->value;
+        if (!is_null($this->value)) {
+            return $this->value;
+        } else {
+            return '';
+        }
     }
 
     function isHtmlAttribute($attribute) {
@@ -185,6 +192,10 @@ class HtmlAttribute {
     }
 
     function render() {
-        return $this->name . '="' . $this->value . '"';
+        if (!is_null($this->value)) {
+            return $this->name . '="' . $this->value . '"';
+        } else {
+            return $this->name;
+        }
     }
 }
