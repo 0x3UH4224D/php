@@ -13,8 +13,7 @@ class Link extends Widget {
     private const titleShouldBeString = 'Link title should be string';
     private const urlShouldBeString = 'Link url should be string';
 
-    function __construct($name, $title, $url) {
-        $this->setName($name);
+    function __construct($title, $url) {
         $this->setTag('a');
 
         $this->setTitle($title);

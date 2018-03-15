@@ -13,19 +13,23 @@ class Navbar extends Widget {
     // Error messages
     private const notLink = 'Navbar can only contain Link objects';
 
-    function __construct($name, $links = []) {
-        $this->setName($name);
+    function __construct($links = []) {
         $this->setTag("navbar");
 
-        $this->setLinks($links);
+        if (empty($links)) {
+            $this->setLinks($links);
+        }
     }
 
-    function addLink($name, $title, $url) {
-        $link = new Link($name, $title, $url);
+    function addLink($title, $url) {
+        $link = new Link($title, $url);
         $this->links[] = $link;
     }
 
-    function setLinks($links) {
+    function setLinks($links = []) {
+        if (empty($links)) {
+            return;
+        }
         // make sure passed array contains links objects
         foreach ($links as $link) {
             if (!Link::isLink($link)) {

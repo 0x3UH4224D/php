@@ -13,8 +13,7 @@ class Image extends Widget {
     private const heightShouldBeString = "Image Height should be String like: 10%, 50px";
     private const widthShouldBeString = "Image Width should be String like: 10%, 50px";
 
-    function __construct($name, $alt, $source, $height = null, $width = null) {
-        $this->setName($name);
+    function __construct($alt, $source, $height = null, $width = null) {
         $this->setTag('img');
         $this->setCloseTag(false);
 

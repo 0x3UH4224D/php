@@ -12,9 +12,8 @@ class Form extends Container {
     private const acceptCharsetShouldBeString = "Form AcceptCharset should be string";
     private const autoCompleteShouldBeBool = "Form AutoComplete should be 'true' or 'false'";
 
-    function __construct($name, $method = 'get', $action = '') {
-        parent::__construct($name);
-        $this->setTag('form');
+    function __construct($method = 'get', $action = '') {
+        parent::__construct('form');
 
         $this->setMethod($method);
         $this->setAction($action);

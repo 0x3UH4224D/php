@@ -9,9 +9,8 @@ use \CTG\Widgets\Container;
 use \CTG\Widgets\HtmlAttribute;
 
 class ListBox extends Container {
-    function __construct($name) {
-        $this->setName($name);
-        $this->setTag('ul');
+    function __construct() {
+        parent::__construct('ul');
     }
 
     function toOrderedList() {
@@ -20,10 +19,6 @@ class ListBox extends Container {
 
     function toUnorderedList() {
         $this->setTag('ul');
-    }
-
-    function add(&$item) {
-        Container::add($item);
     }
 
     function render() {

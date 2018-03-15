@@ -9,7 +9,7 @@ abstract class Widget {
     private $attributes = [];
 
     // widget unique name
-    private $name;
+    private $name = null;
     // whether this widget should close the HTML tage or not
     private $closeTag = true;
 
@@ -97,7 +97,7 @@ abstract class Widget {
         return $this->name;
     }
 
-    protected function setName($name) {
+    function setName($name) {
         if (!is_string($name)) {
             throw new \Exception(self::nameShouldBeString);
         }

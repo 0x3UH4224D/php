@@ -288,7 +288,7 @@ class Input extends Widget {
         }
     }
 
-    protected function setName($name) {
+    function setName($name) {
         parent::setName($name);
         $this->addAttribute('name', $name);
     }
