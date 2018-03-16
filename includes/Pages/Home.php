@@ -49,7 +49,8 @@ class Home extends Page {
             Separator::NewLine(),
             Input::Checkbox('remember', 'remember_me', true),
             Separator::NewLine(),
-            Input::Submit('login_btn', 'Login')
+            Input::Submit('login_btn', 'Login'),
+            new Link('Forget password', '/forget-password.php')
         );
 
         return $login_form->render();
