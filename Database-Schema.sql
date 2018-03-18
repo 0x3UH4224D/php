@@ -1,8 +1,77 @@
-CREATE DATABASE CTI-TTC;
+CREATE DATABASE ctittc;
 
-USE CTI-TTC;
+USE ctittc;
 
-CREATE TABLE USER {
-id INT,
+CREATE TABLE users (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(25) NOT NULL UNIQUE,
+    permission INT(3) NOT NULL DEFAULT 100,
+    phone VARCHAR(14) UNIQUE,
+    email VARCHAR(254) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
+    slat VARCHAR(64) NOT NULL,
+    registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_phone CHECK (phone LIKE '05________%' OR phone LIKE '٠٥________%'),
+    CONSTRAINT chk_username CHECK (CHAR_LENGTH(username) >= 3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-}
+CREATE TABLE clubs (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    clubname VARCHAR(35) NOT NULL UNIQUE,
+    description VARCHAR(300) NOT NULL,
+    goals VARCHAR(200) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    manager INT NOT NULL,
+    CONSTRAINT frnkey_manager_id FOREIGN KEY (manager) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE clubs_members (
+    club_id INT NOT NULL,
+    user_id INT NOT NULL,
+    registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    job VARCHAR(25) NOT NULL,
+    CONSTRAINT PRIMARY KEY (club_id, user_id),
+    CONSTRAINT frnkey_club_id FOREIGN KEY (club_id) REFERENCES clubs(id),
+    CONSTRAINT frnkey_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE ideas (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(300) NOT NULL,
+    details VARCHAR(2000) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    owner INT NOT NULL,
+    CONSTRAINT frnkey_owner_id FOREIGN KEY (owner) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE courses (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(300) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    start_at DATETIME NOT NULL,
+    end_at DATETIME NOT NULL,
+    url VARCHAR(100),
+    teacher INT NOT NULL,
+    CONSTRAINT frnkey_teacher_id FOREIGN KEY (teacher) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE news (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    summary VARCHAR(150) NOT NULL,
+    content TEXT NOT NULL,
+    published_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    draft INT(1) NOT NULL DEFAULT 0,
+    author INT NOT NULL,
+    CONSTRAINT chk_draft CHECK (draft BETWEEN 1 AND 0),
+    CONSTRAINT frnkey_author_id FOREIGN KEY (author) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- CREATE TABLE logs {
+--        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+--        user_id INT NOT NULL,
+--        domain_id INT NOT NULL,
+--        details VARCHAR(300) NOT NULL
+-- }
