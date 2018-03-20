@@ -10,8 +10,6 @@ abstract class Page {
         $this->lang = $lang;
     }
 
-    abstract function handler();
-    
     protected function header() {
         return "<!doctype html>\n"
              . "<html lang='$this->lang'>\n"
@@ -29,7 +27,10 @@ abstract class Page {
              . "</html>";
     }
     
+    abstract protected function handler();
+    
     function render() {
+        $this->handler();
         return $this->header() . "\n"
              . $this->body() . "\n"
              . $this->footer();
