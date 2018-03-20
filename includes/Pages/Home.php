@@ -3,60 +3,53 @@ namespace CTG\Pages;
 
 require_once "./includes/Pages/Page.php";
 require_once "./includes/Widgets/Navbar.php";
-require_once "./includes/Widgets/Container.php";
-require_once "./includes/Widgets/Link.php";
-require_once "./includes/Widgets/ListBox.php";
-require_once "./includes/Widgets/Text.php";
-require_once "./includes/Widgets/Image.php";
-require_once "./includes/Widgets/Form.php";
-require_once "./includes/Widgets/Input.php";
-require_once "./includes/Widgets/Separator.php";
+require_once "./includes/Widgets/LoginBox.php";
 
 use \CTG\Pages\Page;
 use \CTG\Widgets\Navbar;
-use \CTG\Widgets\Container;
-use \CTG\Widgets\Link;
-use \CTG\Widgets\ListBox;
-use \CTG\Widgets\Text;
-use \CTG\Widgets\Image;
-use \CTG\Widgets\Form;
-use \CTG\Widgets\Input;
-use \CTG\Widgets\Separator;
+use \CTG\Widgets\LoginBox;
 
 class Home extends Page {
+    private const UrlPattern = '/';
+
     function __construct() {
-        Page::__construct('بوابة مركز الموهوبين', 'ar');
+        parent::__construct('بوابة مركز الموهوبين', 'ar');
+    }
+
+    static function run() {
+        $page = new self();
+        $page->render();
+    }
+
+    static function getUrlPattern() {
+        return self::UrlPattern;
     }
 
     protected function header() {
-        $header = Page::header();
+        /* $header = Page::header(); */
+
+        $header = "<!doctype html>\n"
+                . "<html lang='$this->lang'>\n"
+                . "<head>\n"
+                . "<meta charset='UTF-8'/>\n"
+                . '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">'
+                . "<title>$this->title</title>\n"
+                . "</head>\n"
+                . "<body style='dir: rtl; text-align: right'>";
 
         $navabr = new Navbar();
-        $navabr->addLink('Home', '/index.php');
-        $navabr->addLink('About Me', '/about-me.php');
+        $navabr->addLink('الرئيسية', '');
 
         return $header . "\n" . $navabr->render();
     }
 
     protected function body() {
-        $login_form = new Form('post');
-        $login_form->adds(
-            Text::PlainText('Username: '),
-            Input::Text('username', 'Enter your name', true),
-            Separator::NewLine(),
-            Text::PlainText('Password: '),
-            Input::Password('password', 'Enter your password', true),
-            Separator::NewLine(),
-            Input::Checkbox('remember', 'remember_me', true),
-            Separator::NewLine(),
-            Input::Submit('login_btn', 'Login'),
-            new Link('Forget password', '/forget-password.php')
-        );
+        $login = new LoginBox();
 
-        return $login_form->render();
+        return $login->render();
     }
 
-    function handler() {
+    protected function handler() {
         if (isset($_POST['username']) && isset($_POST['password'])) {
             echo $_POST['username'];
             echo "\n";

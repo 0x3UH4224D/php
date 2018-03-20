@@ -10,6 +10,10 @@ abstract class Page {
         $this->lang = $lang;
     }
 
+    abstract static function run();
+
+    abstract static function getUrlPattern();
+
     protected function header() {
         return "<!doctype html>\n"
              . "<html lang='$this->lang'>\n"
@@ -31,9 +35,9 @@ abstract class Page {
     
     function render() {
         $this->handler();
-        return $this->header() . "\n"
-             . $this->body() . "\n"
-             . $this->footer();
+        echo $this->header() . "\n"
+           . $this->body() . "\n"
+           . $this->footer();
     }
 
     function getTitle() {
