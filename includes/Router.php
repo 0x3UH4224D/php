@@ -1,9 +1,6 @@
 <?php
 namespace CTG;
 
-require_once './includes/Pages/Page.php';
-use \CTG\Pages\Page;
-
 class Router {
     private $routes = [];
     private $notFoundRoute = null;
@@ -54,7 +51,6 @@ class Router {
     }
 
     function start($url) {
-        // TODO
         $url = $this->getProperUrl($url);
         
         foreach ($this->routes as $pattern => $callback) {
