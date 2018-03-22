@@ -17,5 +17,6 @@
             <label for="phone">الجوال</label>
             <input id="phone" class="form-control" type="tel" name="phone" placeholder="ادخل رقم الهاتف الخاص بك" /><br>
         </div>
+        <button type="submit" class="btn btn-primary">سجّل</button>
     </form>
 </div>

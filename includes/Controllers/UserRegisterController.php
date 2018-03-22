@@ -33,6 +33,16 @@ class UserRegisterController extends PageController {
     }
 
     protected function handler() {
+        $username = isset($_POST['username']) ? $_POST['username'] : null;
+        $email = isset($_POST['email']) ? $_POST['email'] : null;
+        $password = isset($_POST['password']) ? $_POST['password'] : null;
+        $phone = isset($_POST['phone']) ? $_POST['phone'] : null;
+        echo $username . "<BR>";
+        echo $email . "<BR>";
+        echo $password . "<BR>";
+        echo $phone . "<BR>";
+
+
     }
 
     protected function body() {
