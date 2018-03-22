@@ -1,8 +1,10 @@
 <?php
 require_once './includes/Controllers/HomeController.php';
+require_once './includes/Controllers/UserRegisterController.php';
 require_once './includes/Router.php';
 
 use \CTG\Router;
+<<<<<<< HEAD
 $router = new Router();
 
 // pages 
@@ -95,6 +97,18 @@ $router->addPage('\CTG\Controllers\HomeController');
 
 
 
+=======
+
+function my_css() {
+    header('Content-Type: text/css');
+    require_once './theme/css/main.css';
+}
+
+$router = new Router();
+$router->addRoute('/theme/css/main.css', 'my_css');
+$router->addPage('\CTG\Controllers\HomeController');
+$router->addPage('\CTG\Controllers\UserRegisterController');
+>>>>>>> 64ceafab4023e90d79d6a46526b881dac51a810d
 /* $router->addPage('\CTG\Pages\News');
  * $router->addPage('\CTG\Pages\AboutUs');
  * $router->addPage('\CTG\Pages\Clubs');
