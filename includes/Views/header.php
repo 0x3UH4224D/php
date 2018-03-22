@@ -1,4 +1,3 @@
-<?php require_once './theme/css/main.css';?>
 <!DOCTYPE html>
 <html lang="<?php echo $this->lang; ?>">
     <head>
