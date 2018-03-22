@@ -55,7 +55,7 @@ class Router {
         
         foreach ($this->routes as $pattern => $callback) {
             $page_url_pattern = $this->convertUrlToPattern($pattern);
-            /* echo $pattern . "<br>" . $page_url_pattern . "<br>" . $url; */
+            // echo $pattern . "<br>" . $page_url_pattern . "<br>" . $url; 
             if (preg_match($page_url_pattern, $url)) {
                 call_user_func($callback);
                 return;
