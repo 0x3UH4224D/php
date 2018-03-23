@@ -68,4 +68,31 @@ class Club {
     function getManager() {
         return $this->manager;
     }
+
+    // Methods for users table
+    function addClub($id, $name, $goals, $members, $managerID) {
+        // TODO
+    }
+
+    function clubGetName($id) {
+        // TODO
+    }
+
+    function clubGetGoals($id) {
+        // TODO
+    }
+
+    function clubGetMembers($id) {
+        // TODO
+    }
+
+    function clubGetManager($id) {
+        // TODO
+    }
+
+    function clubGetIdByName($name) {
+        // TODO
+    }
+
+
 }

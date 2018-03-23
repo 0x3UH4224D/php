@@ -2,9 +2,11 @@
 namespace CTG\Controllers;
 
 require_once "./includes/Controllers/PageController.php";
+require_once "./includes/Models/User.php";
+require_once "./includes/Models/Database.php";
 
-use \CTG\Pages\MainPage;
-use \CTG\Widgets\TopNavbarBox;
+use \CTG\Models\User;
+use \CTG\Models\Database;
 
 class HomeController extends PageController {
     private $user_is_admin = false;
@@ -27,6 +29,9 @@ class HomeController extends PageController {
 
     protected function handler() {
         session_start();
+
+        $user = User::findById(2);
+        var_dump($user);
 
         if (isset($_POST['username']) && isset($_POST['password'])) {
             echo $_POST['username'];

@@ -21,32 +21,33 @@ class UserRegisterController extends PageController {
     private $username_pattern = false;
     private $invalid_username = false;
     private $username_in_use = false;
-    private $ = false;
 
-    parent::__construct('تسجيل عضو جديد');
-    $this->formdata = new LogginForm();
-}
-
-static function getUrlPattern() {
-    return '/new-member/';
-}
-
-static function run() {
-    $page = new self();
-    $page->handler();
-    $page->render();
-}
-
-protected function handler() {
-    $username = isset($_POST['username']) ? $_POST['username'] : null;
-    $email = isset($_POST['email']) ? $_POST['email'] : null;
-    $password = isset($_POST['password']) ? $_POST['password'] : null;
-    $phone = isset($_POST['phone']) ? $_POST['phone'] : null;
+    function __construct() {
+        parent::__construct('تسجيل عضو جديد');
+        $this->formdata = new LogginForm();
+    }
 
 
-}
+    static function getUrlPattern() {
+        return '/new-member/';
+    }
 
-protected function body() {
-    require_once './includes/Views/user-register.php';
-}
+    static function run() {
+        $page = new self();
+        $page->handler();
+        $page->render();
+    }
+
+    protected function handler() {
+        $username = isset($_POST['username']) ? $_POST['username'] : null;
+        $email = isset($_POST['email']) ? $_POST['email'] : null;
+        $password = isset($_POST['password']) ? $_POST['password'] : null;
+        $phone = isset($_POST['phone']) ? $_POST['phone'] : null;
+
+
+    }
+
+    protected function body() {
+        require_once './includes/Views/user-register.php';
+    }
 }

@@ -5,13 +5,13 @@ USE ctittc;
 CREATE TABLE users (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(25) NOT NULL UNIQUE,
-    permission INT(3) NOT NULL DEFAULT 100,
     phone VARCHAR(14) UNIQUE,
     email VARCHAR(254) NOT NULL UNIQUE,
+    permission INT(3) NOT NULL DEFAULT 100,
     password VARCHAR(64) NOT NULL,
     slat VARCHAR(64) NOT NULL,
-    registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT chk_phone CHECK (phone LIKE '05________%' OR phone LIKE '٠٥________%'),
+    registration_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_phone CHECK (phone LIKE '05________%'),
     CONSTRAINT chk_username CHECK (CHAR_LENGTH(username) >= 3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -80,48 +80,35 @@ class Database {
         $this->createTablesIfNotExist();
     }
 
-    function query(string $sql, $values) {
-        $stmt = self::$connection->prepare($sql);
-        $stmt->execute($values);
-        $rows = $stmt->fetchAll();
-        $stmt->closeCursor();
-        $stmt = null;
-        return $rows;
+    function query(string $sql) {
+        try {
+            $stmt = self::$connection->prepare($sql);
+            $stmt->execute();
+            $rows = $stmt->fetchAll();
+            $stmt->closeCursor();
+            $stmt = null;
+            return $rows;
+        } catch (\PDOException $e){
+            echo $e;
+            throw new \Exception("Couldn't talk to database");
+        }
     }
 
-    function execute(string $sql, $values) {
-        $stmt = self::$connection->prepare($sql);
-        $result = $stmt->execute($values);
-        $stmt->closeCursor();
-        $stmt = null;
-        return $result;
+    function execute(string $sql) {
+        try {
+            $stmt = self::$connection->prepare($sql);
+            $result = $stmt->execute();
+            $stmt->closeCursor();
+            $stmt = null;
+            return $result;
+        } catch (\PDOException $e){
+            echo $e;
+            throw new \Exception("Couldn't talk to database");
+        }
     }
 
-    // Methods for users table
-    function addClub($id, $name, $goals, $members, $managerID) {
+    // Validation function
+    function isVaildInt() {
         // TODO
     }
-
-    function clubGetName($id) {
-        // TODO
-    }
-
-    function clubGetGoals($id) {
-        // TODO
-    }
-
-    function clubGetMembers($id) {
-        // TODO
-    }
-
-    function clubGetManager($id) {
-        // TODO
-    }
-
-    function clubGetIdByName($name) {
-        // TODO
-    }
-
-    // TODO: Add other functions
-    // TODO: make functions return wither they executed successfully or not.
 }
