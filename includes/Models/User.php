@@ -1,7 +1,7 @@
 <?php
-namespace CTG\Database;
+namespace CTG\Models;
 
-use Database;
+require_once "./includes/Models/Database.php";
 
 class User {
     // User info goes here
@@ -85,6 +85,123 @@ class User {
         return $this->registered_at;
     }
 
+    // Check if username is already in use
+    function isUsernameUsed(string $username) {
+        $db = new Database();
+        $sql = 'SELECT username FROM users WHERE lower(username) = lower(?)';
+        $row = $this->query($sql, [$username]);
+
+        if (empty($row)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // Check if email is already in use
+    function isEmailUsed(string $email) {
+        $sql = 'SELECT email FROM users WHERE lower(email) = lower(?)';
+        $row = $this->query($sql, [$email]);
+
+        if (empty($row)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // Check if phone number is already in use
+    function isPhoneUsed(string $phone) {
+        $sql = 'SELECT phone FROM users WHERE phone = ?';
+        $row = $this->query($sql, [$phone]);
+
+        if (empty($row)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function isValidUsername(string $username) {
+        // TODO
+        return true;
+    }
+
+    function isValidPassword(string $password) {
+        // TODO
+        return true;
+    }
+
+    function isValidPhone(string $phone) {
+        // TODO
+        return true;
+    }
+
+    function isValidEmail(string $email) {
+        // TODO
+        return true;
+    }
+
+    function addUser(
+        string $username,
+        string $raw_password,
+        string $email,
+        string $phone = null
+    ) {
+        // check for input if they are in used or they are not valid
+        if ($this->isUsernameUsed($username)) {
+            throw new \Exception('This username is not available, please pick another one');
+        }
+        if (!$this->isValidUsername($username)) {
+            throw new \Exception('Username is not valid');
+        }
+
+        if ($this->isEmailUsed($email)) {
+            throw new \Exception('This email is not available, please pick another one');
+        }
+        if (!$this->isValidEmail($email)) {
+            throw new \Exception('Email is not valid');
+        }
+
+        if (!is_null($phone)) {
+            if ($this->isPhoneUsed((string)$phone)) {
+                throw new \Exception('This phone is not available, please pick another one');
+            }
+            if (!$this->isValidPhone((string)$phone)) {
+                throw new \Exception('phone is not valid');
+            }
+        }
+
+        if (!$this->isValidPassword($raw_password)) {
+            throw new \Exception('Password is not valid');
+        }
+
+
+        // TODO: generate a new slat to hash password, and save it in the database
+        $slat = 'SLAT_EMPTY';
+        $password = $raw_password;
+
+        // insert data to database
+        $sql = '';
+        $values = [];
+        if (is_null($phone)) {
+            $sql = 'INSERT INTO users (username, email, password, slat)'
+                 . 'VALUES (?, ?, ?, ?)';
+            $values = [$username, $email, $password, $slat];
+        } else {
+            $sql = 'INSERT INTO users (username, phone, email, password, slat)'
+                 . 'VALUES (?, ?, ?, ?, ?)';
+            $values = [$username, $phone, $email, $password, $slat];
+        }
+
+        return $this->execute($sql, $values);
+    }
+
+    function addAdmin($username, $raw_password, $email, $phone) {
+        // TODO
+    }
+
+    
     // TODO: not done yet
 }
 

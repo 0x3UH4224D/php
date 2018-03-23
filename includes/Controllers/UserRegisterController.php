@@ -2,9 +2,9 @@
 namespace CTG\Controllers;
 
 require_once "./includes/Controllers/PageController.php";
+require_once "./includes/Models/User.php";
 
-use \CTG\Pages\MainPage;
-use \CTG\Widgets\TopNavbarBox;
+use \CTG\Models\User;
 
 class LogginForm {
     private $username = null;
@@ -17,35 +17,36 @@ class UserRegisterController extends PageController {
     private $user_is_loged_in = false;
     private $formdata;
 
-    function __construct() {
-        parent::__construct('تسجيل عضو جديد');
-        $this->formdata = new LogginForm();
-    }
+    // Show errors trigger
+    private $username_pattern = false;
+    private $invalid_username = false;
+    private $username_in_use = false;
+    private $ = false;
 
-    static function getUrlPattern() {
-        return '/new-member/';
-    }
+    parent::__construct('تسجيل عضو جديد');
+    $this->formdata = new LogginForm();
+}
 
-    static function run() {
-        $page = new self();
-        $page->handler();
-        $page->render();
-    }
+static function getUrlPattern() {
+    return '/new-member/';
+}
 
-    protected function handler() {
-        $username = isset($_POST['username']) ? $_POST['username'] : null;
-        $email = isset($_POST['email']) ? $_POST['email'] : null;
-        $password = isset($_POST['password']) ? $_POST['password'] : null;
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : null;
-        echo $username . "<BR>";
-        echo $email . "<BR>";
-        echo $password . "<BR>";
-        echo $phone . "<BR>";
+static function run() {
+    $page = new self();
+    $page->handler();
+    $page->render();
+}
+
+protected function handler() {
+    $username = isset($_POST['username']) ? $_POST['username'] : null;
+    $email = isset($_POST['email']) ? $_POST['email'] : null;
+    $password = isset($_POST['password']) ? $_POST['password'] : null;
+    $phone = isset($_POST['phone']) ? $_POST['phone'] : null;
 
 
-    }
+}
 
-    protected function body() {
-        require_once './includes/Views/user-register.php';
-    }
+protected function body() {
+    require_once './includes/Views/user-register.php';
+}
 }

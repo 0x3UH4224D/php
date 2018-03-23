@@ -1,7 +1,5 @@
 <?php
-namespace CTG\Database;
-
-use Database;
+namespace CTG\Models;
 
 class Club {
     // Club info goes here
