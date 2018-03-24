@@ -4,7 +4,7 @@ namespace CTG\Models;
 require_once "./includes/Models/Database.php";
 
 class User {
-    // User info goes here
+    // User Info goes here
     protected $id;
     protected $username;
     protected $phone;
@@ -32,25 +32,80 @@ class User {
         return $user;
     }
 
-    static function addNewUser($username, $phone, $email, $password) {
+    static function findByUsername(string $username) {
+        $user = new self();
+        $user->id = $user->getIdByUsername($username);
+        $user->phone = $user->getPhoneByUsername($username);
+        $user->email = $user->getEmailByUsername($username);
+        $user->permission = $user->getPermissionByUsername($username);
+        $user->password = $user->getPasswordByUsername($username);
+        $user->slat = $user->getSlatByUsername($username);
+        $user->registration_date = $user->getRegistrationDateByUsername($username);
+        $user->username = $username;
+        
+        return $user;
+    }
+
+    static function addNewUser($username, $email, $password, $phone = null) {
         // TODO: add a new user row to to the database using Database class
         //       and return an instance of User if it's added to the database
         //       successfully, otherwise throw an Exception.
 
-        // TODO: use try {} block to catch errors
+        $db = new Database();
+        // check for input if they are in used or they are not valid
+        if (self::isUsernameUsed($username)) {
+            throw new \Exception('This username is not available, please pick another one');
+        }
+        if (!self::isValidUsername($username)) {
+            throw new \Exception('Username is not valid');
+        }
 
-        /* $db->addUser($id, $name, $goals, $members, $managerID);
+        if (self::isEmailUsed($email)) {
+            throw new \Exception('This email is not available, please pick another one');
+        }
+        if (!self::isValidEmail($email)) {
+            throw new \Exception('Email is not valid');
+        }
 
-         * $user = new self();
-         * $user->id = $id;
-         * $user->name = $name;
-         * $user->goals = $goals;
-         * $user->members = $members;
-         * $user->manager = $db->userGetManager($id); */
+        if (!is_null($phone)) {
+            if (self::isPhoneUsed((string)$phone)) {
+                throw new \Exception('This phone is not available, please pick another one');
+            }
+            if (!self::isValidPhone((string)$phone)) {
+                throw new \Exception('phone is not valid');
+            }
+        }
 
-        return $user;
+        if (!self::isValidPassword($password)) {
+            throw new \Exception('Password is not valid');
+        }
+
+        // TODO: generate a new slat to hash password, and save it in the database
+        $slat = 'SLAT_EMPTY';
+
+        // insert data to database
+        $sql = '';
+        $values = [];
+        if (is_null($phone)) {
+            $sql = 'INSERT INTO users (username, email, password, slat)'
+                 . "VALUES (\"$username\", \"$email\", \"$password\", \"$slat\")";
+            $db = new Database();
+            $db->execute($sql);
+        } else {
+            $sql = 'INSERT INTO users (username, phone, email, password, slat)'
+                 . "VALUES (\"$username\", \"$phone\", \"$email\", \"$password\", \"$slat\")";
+            $db = new Database();
+            $db->execute($sql);
+        }
+
+        return self::findByUsername($username);
     }
 
+    // Add a new admin to the database with admin permission
+    function addAdmin($username, $raw_password, $email, $phone) {
+        // TODO
+    }
+    
     function getID() {
         return $this->id;
     }
@@ -84,10 +139,10 @@ class User {
     }
 
     // Check if username is already in use
-    function isUsernameUsed(string $username) {
+    static function isUsernameUsed(string $username) {
+        $sql = 'SELECT * FROM users WHERE lower(username) = lower("'.$username.'")';
         $db = new Database();
-        $sql = 'SELECT username FROM users WHERE lower(username) = lower(?)';
-        $row = $this->query($sql, [$username]);
+        $row = $db->query($sql);
 
         if (empty($row)) {
             return false;
@@ -97,9 +152,10 @@ class User {
     }
 
     // Check if email is already in use
-    function isEmailUsed(string $email) {
-        $sql = 'SELECT email FROM users WHERE lower(email) = lower(?)';
-        $row = $this->query($sql, [$email]);
+    static function isEmailUsed(string $email) {
+        $sql = 'SELECT email FROM users WHERE lower(email) = lower("'.$email.'")';
+        $db = new Database();
+        $row = $db->query($sql);
 
         if (empty($row)) {
             return false;
@@ -109,9 +165,9 @@ class User {
     }
 
     // Check if phone number is already in use
-    function isPhoneUsed(string $phone) {
-        $sql = 'SELECT phone FROM users WHERE phone = ?';
-        $row = $this->query($sql, [$phone]);
+    static function isPhoneUsed(string $phone) {
+        $sql = 'SELECT phone FROM users WHERE phone = '.$phone;
+        $row = $db->query($sql);
 
         if (empty($row)) {
             return false;
@@ -121,225 +177,175 @@ class User {
     }
 
     // validate username 
-    function isValidUsername(string $username) {
+    static function isValidUsername(string $username) {
         // TODO
         return true;
     }
 
     // validate password
-    function isValidPassword(string $password) {
+    static function isValidPassword(string $password) {
         // TODO
         return true;
     }
 
     // validate phone
-    function isValidPhone(string $phone) {
+    static function isValidPhone(string $phone) {
         // TODO
         return true;
     }
 
     // validate email
-    function isValidEmail(string $email) {
+    static function isValidEmail(string $email) {
         // TODO
         return true;
     }
 
-    // Add a new user to the database.
-    function addUser(
-        string $username,
-        string $raw_password,
-        string $email,
-        string $phone = null
-    ) {
-        // check for input if they are in used or they are not valid
-        if ($this->isUsernameUsed($username)) {
-            throw new \Exception('This username is not available, please pick another one');
-        }
-        if (!$this->isValidUsername($username)) {
-            throw new \Exception('Username is not valid');
-        }
-
-        if ($this->isEmailUsed($email)) {
-            throw new \Exception('This email is not available, please pick another one');
-        }
-        if (!$this->isValidEmail($email)) {
-            throw new \Exception('Email is not valid');
-        }
-
-        if (!is_null($phone)) {
-            if ($this->isPhoneUsed((string)$phone)) {
-                throw new \Exception('This phone is not available, please pick another one');
-            }
-            if (!$this->isValidPhone((string)$phone)) {
-                throw new \Exception('phone is not valid');
-            }
-        }
-
-        if (!$this->isValidPassword($raw_password)) {
-            throw new \Exception('Password is not valid');
-        }
-
-
-        // TODO: generate a new slat to hash password, and save it in the database
-        $slat = 'SLAT_EMPTY';
-        $password = $raw_password;
-
-        // insert data to database
-        $sql = '';
-        $values = [];
-        if (is_null($phone)) {
-            $sql = 'INSERT INTO users (username, email, password, slat)'
-                 . 'VALUES (?, ?, ?, ?)';
-            $values = [$username, $email, $password, $slat];
-        } else {
-            $sql = 'INSERT INTO users (username, phone, email, password, slat)'
-                 . 'VALUES (?, ?, ?, ?, ?)';
-            $values = [$username, $phone, $email, $password, $slat];
-        }
-
-        return $this->execute($sql, $values);
-    }
-
-    // Add a new admin to the database with admin permission
-    function addAdmin($username, $raw_password, $email, $phone) {
-        // TODO
-    }
-
-    // general function that help get one value using one condation
-    function getValueBy($column, $condation, $value) {
-        $db = new Database();
-        $sql = 'SELECT ' . $column
-             . ' FROM users'
-             . ' WHERE ' . $condation . ' = ' . $value;
-        $row = $db->query($sql);
-        if (empty($row)) {
-            $column_v = $column->value;
-            $condation_v = $condation->value;
-            throw new \Exception("No $column_v found with this $condation_v.");
-        } else {
-            /* var_dump($row[0]);*/
-            return $row[0][$column];
-        }
-    }
-
     // functions for id column in database
-    function getIdByUsername(string $username) {
-        return $this->getValueBy('id', 'username', $username);
+    static function getIdByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'id', 'username', '"' . $username . '"');
     }
 
-    function getIdByPhone(string $phone) {
-        return $this->getValueBy('id', 'phone', $phone);
+    static function getIdByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'id', 'username', $username);
     }
 
-    function getIdByEmail(string $email) {
-        return $this->getValueBy('id', 'email', $email);
+    static function getIdByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'id', 'email', $email);
     }
 
     // functions for username column in database
-    function getUsernameById(string $id) {
-        return $this->getValueBy('username', 'id', $id);
+    static function getUsernameById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'username', 'id', $id);
     }
 
-    function getUsernameByEmail(string $email) {
-        return $this->getValueBy('username', 'email', $email);
+    static function getUsernameByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'username', 'email', $email);
     }
 
-    function getUsernameByPhone(string $phone) {
-        return $this->getValueBy('username', 'phone', $phone);
+    static function getUsernameByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'username', 'phone', $phone);
     }
 
     // functions for phone column in database
-    function getPhoneById(string $id) {
-        return $this->getValueBy('phone', 'id', $id);
+    static function getPhoneById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'phone', 'id', $id);
     }
 
-    function getPhoneByUsername(string $username) {
-        return $this->getValueBy('phone', 'username', $username);
+    static function getPhoneByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'phone', 'username', $username);
     }
 
-    function getPhoneByEmail(string $email) {
-        return $this->getValueBy('phone', 'email', $email);
+    static function getPhoneByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'phone', 'email', $email);
     }
 
     // functions for Email column in database
-    function getEmailById(string $id) {
-        return $this->getValueBy('email', 'id', $id);
+    static function getEmailById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'email', 'id', $id);
     }
 
-    function getEmailByUsername(string $username) {
-        return $this->getValueBy('email', 'username', $username);
+    static function getEmailByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'email', 'username', $username);
     }
 
-    function getEmailByPhone(string $phone) {
-        return $this->getValueBy('email', 'phone', $phone);
+    static function getEmailByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'email', 'phone', $phone);
     }
 
     // functions for permission column in database
-    function getPermissionById(string $id) {
-        return $this->getValueBy('permission', 'id', $id);
+    static function getPermissionById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'permission', 'id', $id);
     }
 
-    function getPermissionByUsername(string $username) {
-        return $this->getValueBy('permission', 'username', $username);
+    static function getPermissionByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'permission', 'username', $username);
     }
 
-    function getPermissionByEmail(string $email) {
-        return $this->getValueBy('permission', 'email', $email);
+    static function getPermissionByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'permission', 'email', $email);
     }
 
-    function getPermissionByPhone(string $phone) {
-        return $this->getValueBy('permission', 'phone', $phone);
+    static function getPermissionByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'permission', 'phone', $phone);
     }
 
     // functions for Password column in database
-    function getPasswordById(string $id) {
-        return $this->getValueBy('password', 'id', $id);
+    static function getPasswordById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'password', 'id', $id);
     }
 
-    function getPasswordByUsername(string $username) {
-        return $this->getValueBy('password', 'username', $username);
+    static function getPasswordByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'password', 'username', $username);
     }
 
-    function getPasswordByEmail(string $email) {
-        return $this->getValueBy('password', 'email', $email);
+    static function getPasswordByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'password', 'email', $email);
     }
-    
-    function getPasswordByPhone(string $phone) {
-        return $this->getValueBy('password', 'phone', $phone);
+
+    static function getPasswordByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'password', 'phone', $phone);
     }
 
     // functions for Slat column in database
-    function getSlatById(string $id) {
-        return $this->getValueBy('slat', 'id', $id);
+    static function getSlatById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'slat', 'id', $id);
     }
 
-    function getSlatByUsername(string $username) {
-        return $this->getValueBy('slat', 'username', $username);
+    static function getSlatByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'slat', 'username', $username);
     }
 
-    function getSlatByEmail(string $email) {
-        return $this->getValueBy('slat', 'email', $email);
+    static function getSlatByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'slat', 'email', $email);
     }
 
-    function getSlatByPhone(string $phone) {
-        return $this->getValueBy('slat', 'phone', $phone);
+    static function getSlatByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'slat', 'phone', $phone);
     }
 
     // functions for registration_date column in database
-    function getRegistrationDateById(string $id) {
-        return $this->getValueBy('registration_date', 'id', $id);
+    static function getRegistrationDateById(string $id) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'registration_date', 'id', $id);
     }
 
-    function getRegistrationDateByUsername(string $username) {
-        return $this->getValueBy('registration_date', 'username', $username);
+    static function getRegistrationDateByUsername(string $username) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'registration_date', 'username', $username);
     }
 
-    function getRegistrationDateByEmail(string $email) {
-        return $this->getValueBy('registration_date', 'email', $email);
+    static function getRegistrationDateByEmail(string $email) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'registration_date', 'email', $email);
     }
 
-    function getRegistrationDateByPhone(string $phone) {
-        return $this->getValueBy('registration_date', 'phone', $phone);
+    static function getRegistrationDateByPhone(string $phone) {
+        $db = new Database();
+        return $db->getColumnValueWhere('users', 'registration_date', 'phone', $phone);
     }
 
     // TODO: not done yet

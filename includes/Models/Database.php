@@ -107,6 +107,18 @@ class Database {
         }
     }
 
+    function getColumnValueWhere($table, $column, $where, $where_value) {
+        $sql = 'SELECT ' . $column
+             . ' FROM ' . $table
+             . ' WHERE ' . $where . ' = ' . $where_value;
+        $row = $this->query($sql);
+        if (empty($row)) {
+            throw new \Exception("No $column found with this $where.");
+        } else {
+            return $row[0][$column];
+        }
+    }
+
     // Validation function
     function isVaildInt() {
         // TODO

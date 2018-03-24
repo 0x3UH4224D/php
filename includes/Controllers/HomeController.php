@@ -31,7 +31,11 @@ class HomeController extends PageController {
         session_start();
 
         $user = User::findById(2);
-        var_dump($user);
+        $me = User::addNewUser('YouMe', 'm@m.com', '0000');
+
+        /* echo User::getIdByUsername('');*/
+
+        /* var_dump($me);*/
 
         if (isset($_POST['username']) && isset($_POST['password'])) {
             echo $_POST['username'];
